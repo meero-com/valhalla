@@ -95,3 +95,19 @@ TEST_F(DeadendBarrier, BikeAllowedNoOtherInformation) {
   result = gurka::do_action(valhalla::Options::route, map, {"A", "B"}, "bicycle");
   gurka::assert::raw::expect_path(result, {"A1", "1B"});
 }
+
+TEST_F(DeadendBarrier, PrivateAccess) {
+  const gurka::nodes nodes = {
+      {"1", {{"barrier", "gate"}, {"access", "private"}}},
+  };
+  const gurka::map map =
+      gurka::buildtiles(layout, ways, nodes, {}, "test/data/deadend_barrier_private_access");
+
+  // auto
+  auto result = gurka::do_action(valhalla::Options::route, map, {"A", "B"}, "auto");
+  gurka::assert::raw::expect_path(result, {"A1", "1B"});
+
+  // pedestrian
+  result = gurka::do_action(valhalla::Options::route, map, {"A", "B"}, "pedestrian");
+  gurka::assert::raw::expect_path(result, {"A1", "1B"});
+}

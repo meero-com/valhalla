@@ -27,7 +27,7 @@ namespace {
 constexpr float kDefaultDestinationOnlyPenalty = 600.0f; // Seconds
 constexpr float kDefaultManeuverPenalty = 5.0f;          // Seconds
 constexpr float kDefaultAlleyPenalty = 5.0f;             // Seconds
-constexpr float kDefaultGatePenalty = 10.0f;             // Seconds
+constexpr float kDefaultGatePenalty = 600.0f;            // Seconds
 constexpr float kDefaultTollBoothCost = 15.0f;           // Seconds
 constexpr float kDefaultFerryCost = 300.0f;              // Seconds
 constexpr float kDefaultCountryCrossingCost = 600.0f;    // Seconds
@@ -469,7 +469,7 @@ public:
     // Cases with both time and penalty: country crossing, ferry, gate, toll booth
     sif::Cost c;
     c += country_crossing_cost_ * (node->type() == baldr::NodeType::kBorderControl);
-    c += gate_cost_ * (node->type() == baldr::NodeType::kGate);
+    c += gate_cost_ * (node->type() == baldr::NodeType::kGate) * (!node->tagged_access());
     c += bike_share_cost_ * (node->type() == baldr::NodeType::kBikeShare);
     c += toll_booth_cost_ * (node->type() == baldr::NodeType::kTollBooth);
     c += ferry_transition_cost_ *
